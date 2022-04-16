@@ -4,7 +4,7 @@ Simple, Easy to use blender addon/plugin to make armor stand animations. This ad
 All steps are on the spigot page.
 https://www.spigotmc.org/threads/armor-stand-animator-addon-plugin.553468/
 
-## Current Bugs/Wierd Code Behaviour
+## Wierd Code Behaviour
 
 1. FBX files has slight rotation when imported
 https://github.com/Wubbodev/Armorstand-Animation-Addon/blob/25b4bca4f452ab038460465c23f42072c55d8529/__init__.py#L40 (line 40 to 43)
