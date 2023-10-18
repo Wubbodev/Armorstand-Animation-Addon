@@ -1,28 +1,12 @@
 bl_info = {
     "name": "Armorstand Animator",
-    "blender": (2, 80, 0),
+    "blender": (3, 6, 0),
     "category": "Object",
 }
 
 import bpy
 import os
 import math
-
-#for paths to work on every computer
-username = os.environ.get('USERNAME').split(" ")[0] 
-version = bpy.app.version_string.split(".")
-disk = os.getenv("SystemDrive")
-
-#removing 0 at the end so it matched the path (2.8)
-i = 0
-for x in version:
-    i = i + 1
-    if i == len(version):
-        if x == str(0):
-            version.pop()
-
-str1 = "." 
-version = str1.join(version)
 
 #armorstand insert button
 class InsertArmorstand(bpy.types.Operator):
@@ -35,7 +19,7 @@ class InsertArmorstand(bpy.types.Operator):
     #when button is clicked
     def execute(self, context):
         #import armorstand into project
-        bpy.ops.import_scene.fbx(filepath = disk + '/Users/' + username + '/AppData/Roaming/Blender Foundation/Blender/' + version + '/scripts/addons/Armorstand Animation Addon/armorstand.fbx')
+        bpy.ops.import_scene.fbx(filepath = os.path.dirname(__file__) + '/armorstand.fbx')
 
         #for some reason objects rotation in the fbx file change to 0.000009 or something
         #so I set all the rotations to 0
@@ -56,7 +40,7 @@ class ExportArmorstandAnim(bpy.types.Operator):
     def execute(self, context):
 
         #start editing the file
-        transformMetrix = open(disk + '/Users/' + username +'/Desktop/Blender/animation.animc','w')
+        transformMetrix = open('~/Desktop/Blender/animation.animc','w')
 
         #write needed things in the file
         transformMetrix.write('interpolate\n')
