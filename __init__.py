@@ -7,6 +7,7 @@ bl_info = {
 import bpy
 import os
 import math
+from bpy_extras.io_utils import ExportHelper
 
 #armorstand insert button
 class InsertArmorstand(bpy.types.Operator):
@@ -29,18 +30,18 @@ class InsertArmorstand(bpy.types.Operator):
         return {'FINISHED'}
 
 #export the animation into animc file
-class ExportArmorstandAnim(bpy.types.Operator):
+class ExportArmorstandAnim(bpy.types.Operator, ExportHelper):
     #info about the button
     """Export Animation To animc File"""
     bl_idname = "object.export_stand"
     bl_label = "Export Animation"
     bl_options = {'REGISTER', 'UNDO'}
 
+    filename_ext = ".animc"
     #when button is clicked
     def execute(self, context):
-
         #start editing the file
-        transformMetrix = open('~/Desktop/Blender/animation.animc','w')
+        transformMetrix = open(self.filepath,'w')
 
         #write needed things in the file
         transformMetrix.write('interpolate\n')
