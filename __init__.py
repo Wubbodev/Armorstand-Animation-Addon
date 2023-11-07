@@ -55,7 +55,9 @@ class ExportArmorstandAnim(bpy.types.Operator, ExportHelper):
             transformMetrix.write('frame ' + str(f)+'\n')
 
             #for every selected object (should select all of the armorstand)
-            for obj in bpy.context.selected_objects:
+            for obj in bpy.context.selectable_objects:
+                if not obj.name.startswith("Armorstand_"):
+                    continue
 
                 x = obj.rotation_euler.x * 180 / math.pi * -1
                 y = obj.rotation_euler.y * 180 / math.pi
