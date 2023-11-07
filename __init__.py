@@ -1,28 +1,13 @@
 bl_info = {
     "name": "Armorstand Animator",
-    "blender": (2, 80, 0),
+    "blender": (3, 6, 0),
     "category": "Object",
 }
 
 import bpy
 import os
 import math
-
-#for paths to work on every computer
-username = os.environ.get('USERNAME').split(" ")[0] 
-version = bpy.app.version_string.split(".")
-disk = os.getenv("SystemDrive")
-
-#removing 0 at the end so it matched the path (2.8)
-i = 0
-for x in version:
-    i = i + 1
-    if i == len(version):
-        if x == str(0):
-            version.pop()
-
-str1 = "." 
-version = str1.join(version)
+from bpy_extras.io_utils import ExportHelper
 
 #armorstand insert button
 class InsertArmorstand(bpy.types.Operator):
@@ -35,7 +20,7 @@ class InsertArmorstand(bpy.types.Operator):
     #when button is clicked
     def execute(self, context):
         #import armorstand into project
-        bpy.ops.import_scene.fbx(filepath = disk + '/Users/' + username + '/AppData/Roaming/Blender Foundation/Blender/' + version + '/scripts/addons/Armorstand Animation Addon/armorstand.fbx')
+        bpy.ops.import_scene.fbx(filepath = os.path.dirname(__file__) + '/armorstand.fbx')
 
         #for some reason objects rotation in the fbx file change to 0.000009 or something
         #so I set all the rotations to 0
@@ -45,18 +30,18 @@ class InsertArmorstand(bpy.types.Operator):
         return {'FINISHED'}
 
 #export the animation into animc file
-class ExportArmorstandAnim(bpy.types.Operator):
+class ExportArmorstandAnim(bpy.types.Operator, ExportHelper):
     #info about the button
     """Export Animation To animc File"""
     bl_idname = "object.export_stand"
     bl_label = "Export Animation"
     bl_options = {'REGISTER', 'UNDO'}
 
+    filename_ext = ".animc"
     #when button is clicked
     def execute(self, context):
-
         #start editing the file
-        transformMetrix = open(disk + '/Users/' + username +'/Desktop/Blender/animation.animc','w')
+        transformMetrix = open(self.filepath,'w')
 
         #write needed things in the file
         transformMetrix.write('interpolate\n')
@@ -70,7 +55,9 @@ class ExportArmorstandAnim(bpy.types.Operator):
             transformMetrix.write('frame ' + str(f)+'\n')
 
             #for every selected object (should select all of the armorstand)
-            for obj in bpy.context.selected_objects:
+            for obj in bpy.context.selectable_objects:
+                if not obj.name.startswith("Armorstand_"):
+                    continue
 
                 x = obj.rotation_euler.x * 180 / math.pi * -1
                 y = obj.rotation_euler.y * 180 / math.pi
